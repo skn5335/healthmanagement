@@ -6,7 +6,9 @@ import { z } from "zod"
 import { Button } from "@/components/ui/button"
 import { Form } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import { CustomFormField } from "../ui/CustomFormField"
+import { CustomFormField } from "../CustomFormField"
+import SubmitButton from "../SubmitButton"
+import { useState } from "react"
 
 export enum FormFieldType {
     INPUT = 'input',
@@ -14,7 +16,8 @@ export enum FormFieldType {
     CHECKBOX = 'checkbox',
     DATE_PICKER = 'datePicker',
     SELECT = 'select',
-    SKELETON = 'skeleton'
+    SKELETON = 'skeleton',
+    PHONE_INPUT = "PHONE_INPUT"
 }
 
 const formSchema = z.object({
@@ -24,7 +27,8 @@ const formSchema = z.object({
 })
  
 const PatientForm = () => {
-  // 1. Define your form.
+  const [isLoading, setIsLoading] = useState(false);
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -49,12 +53,31 @@ const PatientForm = () => {
             control={form.control}
             name="name"
             label="Full Name"
-            placeholder="Samsun Nahar"
-            iconSrc="/assests/icons/user.svg"
+            placeholder="username"
+            iconSrc="/assets/icons/user.svg"
             iconAlt="user"
         />
+        
+        <CustomFormField
+            fieldType={FormFieldType.INPUT}
+            control={form.control}
+            name="email"
+            label="Emai"
+            placeholder="email@psu.edu"
+            iconSrc="/assets/icons/email.svg"
+            iconAlt="email"
+        />
+
+        <CustomFormField
+            fieldType={FormFieldType.PHONE_INPUT}
+            control={form.control}
+            name="phone"
+            label="Phone Number"
+            placeholder="(215) 432-9087"
+        />
+        
     
-        <Button type="submit">Submit</Button>
+        <SubmitButton isLoading={isLoading}> Get Started</SubmitButton>
       </form>
     </Form>    
     )
